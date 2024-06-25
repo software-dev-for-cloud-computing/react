@@ -1,25 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { useIsAuthenticated } from '@azure/msal-react';
+import Login from './login';
+import Dashboard from './Dashboard';  
 
 function App() {
+  const isAuthenticated = useIsAuthenticated();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {!isAuthenticated ? (
+        <Login />
+      ) : (
+        <Dashboard />
+      )}
     </div>
   );
 }
 
 export default App;
+ 
+
+ 
+/* import React, { useState } from 'react';
+import Dashboard from './Dashboard';
+import Login from './login';
+
+function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const handleLogin = () => setIsAuthenticated(true);
+  const handleLogout = () => setIsAuthenticated(false);
+
+  return (
+    <div>
+      {!isAuthenticated ? (
+        <button onClick={handleLogin}>Mock Login</button>
+      ) : (
+        <>
+          <Dashboard />
+          <button onClick={handleLogout}>Logout</button>
+        </>
+      )}
+    </div>
+  );
+}
+
+export default App;  */
