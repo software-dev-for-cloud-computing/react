@@ -1,0 +1,26 @@
+name: Deploy to Docker Hub
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      - name: Build Docker image
+        run: docker build -t your-dockerhub-username/react-app:latest .
+        
+      - name: Log into Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.CR_PAT }}
+          
+      - name: Push Docker image to Docker Hub
+        run: docker push your-dockerhub-username/react-app:latest
