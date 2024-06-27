@@ -1,4 +1,4 @@
-name: Deploy to Docker Hub
+name: Publish Docker Image
 
 on:
   push:
@@ -6,21 +6,21 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  publish:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-        
-      - name: Build Docker image
-        run: docker build -t your-dockerhub-username/react-app:latest .
-        
-      - name: Log into Docker Hub
+
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.CR_PAT }}
-          
-      - name: Push Docker image to Docker Hub
-        run: docker push your-dockerhub-username/react-app:latest
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t ghcr.io/${{ github.repository_owner }}/react-app:latest .
+          docker push ghcr.io/${{ github.repository_owner }}/react-app:latest
