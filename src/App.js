@@ -1,48 +1,45 @@
-import React from 'react';
-import { useIsAuthenticated } from '@azure/msal-react';
-import Login from './login';
-import Dashboard from './Dashboard';  
+import React, { useState } from 'react';
+import Login from './Login';
+import Register from './Register';
+import Dashboard from './Dashboard'; 
+import './App.css'; // Stellen Sie sicher, dass das CSS importiert wird
 
 function App() {
-  const isAuthenticated = useIsAuthenticated();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
+
+  const handleLogin = (authStatus) => {
+    setIsAuthenticated(authStatus);
+  };
+
+  const handleRegister = (isRegistered) => {
+    if (isRegistered) {
+      alert('Registrierung erfolgreich! Sie können sich jetzt anmelden.');
+      setIsRegistering(false);
+    }
+  };
+
+  const toggleForm = () => {
+    setIsRegistering(!isRegistering);
+  };
 
   return (
-    <div>
+    <div className="container">
       {!isAuthenticated ? (
-        <Login />
+        <div className="main-content">
+          {isRegistering ? (
+            <Register onRegister={handleRegister} onToggle={toggleForm} />
+          ) : (
+            <Login onLogin={handleLogin} onToggle={toggleForm} />
+          )}
+        </div>
       ) : (
-        <Dashboard />
+        <div className="main-content">
+          <Dashboard />
+        </div>
       )}
     </div>
   );
 }
 
 export default App;
- 
-
- 
-/* import React, { useState } from 'react';
-import Dashboard from './Dashboard';
-import Login from './login';
-
-function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  const handleLogin = () => setIsAuthenticated(true);
-  const handleLogout = () => setIsAuthenticated(false);
-
-  return (
-    <div>
-      {!isAuthenticated ? (
-        <button onClick={handleLogin}>Mock Login</button>
-      ) : (
-        <>
-          <Dashboard />
-          <button onClick={handleLogout}>Logout</button>
-        </>
-      )}
-    </div>
-  );
-}
-
-export default App;  */

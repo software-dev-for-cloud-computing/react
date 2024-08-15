@@ -1,14 +1,37 @@
-
-import React from 'react';
-import { useMsal } from '@azure/msal-react';
+import React, { useState } from 'react';
 import { Button, TextField, Typography, Paper, Container, Box } from '@mui/material';
 
-function Login() {
-  const { instance } = useMsal();
+function Login({ onLogin, onToggle }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
-    instance.loginRedirect();
+
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      
+
+      const data = await response.json();
+
+      if (response.ok) {
+        onLogin(true);
+        localStorage.setItem('token', data.token);
+      } else {
+        alert(data.message || 'Falsche Anmeldedaten!');
+        onLogin(false);
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+      alert('Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.');
+      onLogin(false);
+    }
   };
 
   return (
@@ -27,6 +50,8 @@ function Login() {
             name="email"
             autoComplete="email"
             autoFocus
+            value={email}
+            onChange={e => setEmail(e.target.value)}
           />
           <TextField
             margin="normal"
@@ -37,6 +62,8 @@ function Login() {
             type="password"
             id="password"
             autoComplete="current-password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
           />
           <Button
             type="submit"
@@ -45,6 +72,14 @@ function Login() {
             sx={{ mt: 3, mb: 2 }}
           >
             Anmelden
+          </Button>
+          <Button
+            onClick={onToggle}
+            fullWidth
+            variant="outlined"
+            sx={{ mt: 1 }}
+          >
+            Zur Registrierung wechseln
           </Button>
         </Box>
       </Paper>
