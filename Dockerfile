@@ -1,7 +1,7 @@
 # Stage 1: Build React App
 FROM node:latest AS build
 
-WORKDIR /react
+WORKDIR /app
 
 COPY package*.json ./
 RUN npm install
