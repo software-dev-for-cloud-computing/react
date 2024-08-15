@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { Button, TextField, Typography, Paper, Container, Box } from '@mui/material';
-import { configDotenv } from 'dotenv';
-require('dotenv').config();
 
 function Register({ onRegister, onToggle }) {
   const [username, setUsername] = useState('');
@@ -18,7 +16,7 @@ function Register({ onRegister, onToggle }) {
     }
 
     try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/register`, {
+        const response = await fetch(`http://localhost:3000/api/auth/register`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
