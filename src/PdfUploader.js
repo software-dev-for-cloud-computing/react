@@ -31,7 +31,7 @@ function PdfUploader({ onFileUpload }) {
 
   const fetchTags = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/tags`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/tags`);
       setTags(response.data);
     } catch (error) {
       console.error('Fehler beim Abrufen der Tags:', error);

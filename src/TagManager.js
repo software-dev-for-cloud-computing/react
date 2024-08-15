@@ -17,7 +17,7 @@ function TagManager() {
 
   const fetchTags = async () => {
     try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/tags`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/tags`);
       setTags(response.data);
     } catch (error) {
       console.error('Fehler beim Abrufen der Tags:', error);
@@ -48,13 +48,13 @@ function TagManager() {
   const handleTagSave = async () => {
     if (isNewTag) {
       try {
-        await axios.post(`${process.env.REACT_APP_API_URL}/tags`, { name: tagInput, description: descriptionInput });
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/tags`, { name: tagInput, description: descriptionInput });
       } catch (error) {
         console.error('Fehler beim Erstellen eines Tags:', error);
       }
     } else {
       try {
-        await axios.put(`${process.env.REACT_APP_API_URL}/tags/${selectedTagId}`, { name: tagInput, description: descriptionInput });
+        await axios.put(`${process.env.REACT_APP_API_URL}/api/tags/${selectedTagId}`, { name: tagInput, description: descriptionInput });
       } catch (error) {
         console.error('Fehler beim Aktualisieren des Tags:', error);
       }
@@ -66,7 +66,7 @@ function TagManager() {
   const handleTagDelete = async () => {
     if (selectedTagId) {
       try {
-        await axios.delete(`${process.env.REACT_APP_API_URL}/tags/${selectedTagId}`);
+        await axios.delete(`${process.env.REACT_APP_API_URL}/api/tags/${selectedTagId}`);
         fetchTags();
       } catch (error) {
         console.error('Fehler beim Löschen des Tags:', error);
