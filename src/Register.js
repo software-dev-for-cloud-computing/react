@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Button, TextField, Typography, Paper, Container, Box } from '@mui/material';
+import { configDotenv } from 'dotenv';
+require('dotenv').config();
 
 function Register({ onRegister, onToggle }) {
   const [username, setUsername] = useState('');
