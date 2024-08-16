@@ -16,7 +16,7 @@ function Register({ onRegister, onToggle }) {
     }
 
     try {
-        const response = await fetch(`0.0.0.0:3000/api/auth/register`, {
+        const response = await fetch(`:3000/api/auth/register`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
