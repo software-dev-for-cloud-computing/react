@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import Login from './Login';
 import Register from './Register';
 import Dashboard from './Dashboard'; 
-import './App.css'; // Stellen Sie sicher, dass das CSS importiert wird
+import './App.css';
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

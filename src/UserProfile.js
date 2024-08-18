@@ -5,7 +5,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 
 function UserProfile() {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [apiKey, setApiKey] = useState(localStorage.getItem('userApiKey') || '');
+  const [apiKey, setApiKey] = useState(localStorage.getItem('apiKey') || '');
 
   const handleOpen = () => {
     setDialogOpen(true);
@@ -17,7 +17,7 @@ function UserProfile() {
 
   const handleSave = () => {
     console.log("API Key gespeichert:", apiKey);
-    localStorage.setItem('userApiKey', apiKey);
+    localStorage.setItem('apiKey', apiKey);
     handleClose();
   };
 

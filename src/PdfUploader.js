@@ -13,7 +13,7 @@ function PdfUploader({ onFileUpload }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [editIndex, setEditIndex] = useState(-1); // -1 means no edit, otherwise it's the index of the editing item
+  const [editIndex, setEditIndex] = useState(-1); // -1 bedeutet kein Editieren, ansonsten ist es der Index des zu bearbeitenden Elements
   const [metadata, setMetadata] = useState({
     author: '',
     title: '',
@@ -24,9 +24,17 @@ function PdfUploader({ onFileUpload }) {
     tag: ''
   });
   const [tags, setTags] = useState([]);
+  const [userId, setUserId] = useState('');
+  const [apiKey, setApiKey] = useState('');
 
   useEffect(() => {
     fetchTags();
+    const storedUserId = sessionStorage.getItem('userId');
+    const storedApiKey = localStorage.getItem('apiKey');
+    console.log('Stored User ID:', storedUserId);
+    console.log('Stored API Key:', storedApiKey);
+    if (storedUserId) setUserId(storedUserId);
+    if (storedApiKey) setApiKey(storedApiKey);
   }, []);
 
   const fetchTags = async () => {
@@ -44,15 +52,47 @@ function PdfUploader({ onFileUpload }) {
   };
 
   const handleUpload = () => {
-    const newEntry = { file: selectedFile, metadata };
-    if (editIndex >= 0) {
-      uploadedFiles[editIndex] = newEntry;
-      setUploadedFiles([...uploadedFiles]);
-    } else {
-      onFileUpload(selectedFile, metadata);
-      setUploadedFiles([...uploadedFiles, newEntry]);
+    console.log('Selected File:', selectedFile);
+    console.log('User ID:', userId);
+    console.log('API Key:', apiKey);
+
+    if (!selectedFile || !userId || !apiKey) {
+      console.error('Fehlende Datei, Benutzer-ID oder API-Schlüssel');
+      return;
     }
-    closeDialog();
+
+    const formData = new FormData();
+    formData.append('pdf', selectedFile);
+    formData.append('userId', userId);
+    formData.append('conversationId', '66c087cde8c0184556971724'); // Beispielhafte Conversation ID
+    formData.append('author', metadata.author);
+    formData.append('title', metadata.title);
+    formData.append('year', metadata.year);
+    formData.append('url', metadata.url);
+    formData.append('isbn', metadata.isbn);
+    formData.append('type', metadata.type);
+    formData.append('tag', metadata.tag);
+    formData.append('apiKey', apiKey);
+
+    axios.post(`${process.env.REACT_APP_API_URL}/api/documents/`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    .then(response => {
+      console.log('Upload erfolgreich', response.data);
+      const newEntry = { file: selectedFile, metadata };
+      if (editIndex >= 0) {
+        uploadedFiles[editIndex] = newEntry;
+        setUploadedFiles([...uploadedFiles]);
+      } else {
+        setUploadedFiles([...uploadedFiles, newEntry]);
+      }
+      closeDialog();
+    })
+    .catch(error => {
+      console.error('Upload fehlgeschlagen', error);
+    });
   };
 
   const handleEdit = (index) => {

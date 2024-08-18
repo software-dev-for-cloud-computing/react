@@ -16,13 +16,13 @@ function Login({ onLogin, onToggle }) {
         },
         body: JSON.stringify({ email, password }),
       });
-      
 
       const data = await response.json();
 
       if (response.ok) {
         onLogin(true);
-        localStorage.setItem('token', data.token);
+        sessionStorage.setItem('userId', data.userId); 
+        localStorage.setItem('token', data.token); 
       } else {
         alert(data.message || 'Falsche Anmeldedaten!');
         onLogin(false);
