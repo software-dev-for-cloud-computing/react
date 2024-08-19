@@ -47,8 +47,22 @@ function Chat() {
             <Box sx={{ flex: 1, overflowY: 'auto' }}>
                 <List>
                     {messages.map((msg, index) => (
-                        <ListItem key={index}>
-                            <ListItemText primary={msg.text} />
+                        <ListItem 
+                            key={index} 
+                            sx={{ 
+                                justifyContent: msg.sender === 'user' ? 'flex-end' : 'flex-start',
+                                textAlign: msg.sender === 'user' ? 'right' : 'left'
+                            }}
+                        >
+                            <ListItemText 
+                                primary={msg.text} 
+                                sx={{
+                                    backgroundColor: msg.sender === 'user' ? '#d1e7dd' : '#f8d7da',
+                                    borderRadius: '10px',
+                                    padding: '8px 16px',
+                                    maxWidth: '75%',
+                                }}
+                            />
                         </ListItem>
                     ))}
                 </List>
